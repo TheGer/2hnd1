@@ -20,7 +20,28 @@ var showText:boolean;
 
 var paused:boolean;
 
+
+var keyPressedTime:float;
+
+var score:int;
+
+function OnTriggerEnter(other:Collider)
+{
+	if(other.gameObject.tag=="mouse")
+	{
+		//removes the mouse from memory
+		print("hit mouse");
+		Destroy(other.gameObject);
+		score++;
+	}
+
+}
+
 function Start () {
+	//time when the game was started
+	//at start of game is 0
+	keyPressedTime = Time.time;
+
 	mouseControl = false;
 	
 	showText = false;
@@ -29,6 +50,13 @@ function Start () {
 }
 
 function Update () {
+
+	//if a second has passed, keypressedtime = 1 second, etc...
+	if (Input.GetKeyDown(KeyCode.T))
+	{
+		keyPressedTime = Time.time;
+	}
+
 	//toggle show text if I press H
 	if (Input.GetKeyDown(KeyCode.H))
 	{
@@ -110,6 +138,9 @@ function Update () {
 	
 }
 
+
+
+
 function OnGUI()
 {
 	GUI.skin = theme;
@@ -132,6 +163,18 @@ function OnGUI()
 	//mouse pointer coordinates. Variable is built into unity.
 	GUI.Label(Rect(0,220,200,30),"MouseX (in pixels): "+Input.mousePosition.x);
 	GUI.Label(Rect(0,250,200,30),"MouseY: (in pixels): "+Input.mousePosition.y);
+	
+	GUI.Label(Rect(0,250,200,30),"MouseY: (in pixels): "+Input.mousePosition.y);
+	
+	//the time since when the game started
+	
+	var seconds:int;
+	var minutes:int;
+	//reset timer when T is pressed
+	seconds = (Time.time-keyPressedTime) % 60;
+	minutes = (Time.time-keyPressedTime)/60;
+	
+	GUI.Label(Rect(0,280,200,30),"Time elapsed: "+minutes+":"+seconds);
 	
 	}
 	
